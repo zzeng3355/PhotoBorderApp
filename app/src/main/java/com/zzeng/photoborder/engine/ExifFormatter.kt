@@ -72,10 +72,11 @@ class ExifFormatter {
     private fun formatShutterSpeed(shutter: String): String {
         if (shutter.isBlank()) return ""
         return try {
-            if (shutter.contains("/")) {
-                shutter
+            val cleaned = shutter.replace(" sec", "").replace("s", "").trim()
+            if (cleaned.contains("/")) {
+                "${cleaned}s"
             } else {
-                val value = shutter.toFloat()
+                val value = cleaned.toFloat()
                 if (value >= 1) {
                     "${value.toInt()}s"
                 } else {

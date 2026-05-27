@@ -18,23 +18,35 @@ class BorderEngine(private val context: Context) {
 
     private val templateManager = TemplateManager(context)
     private val exifFormatter = ExifFormatter()
+    private val fontManager = FontManager(context)
     private val logoCache = mutableMapOf<String, Bitmap>()
+    private val typefaceCache = mutableMapOf<String, Typeface>()
 
     fun processImage(
         imageUri: Uri,
         templateName: String = "zzeng_minimal",
-        outputFile: File
+        fontId: String = "yahei",
+        outputFile: File,
+        maxWidth: Int = 0  // 0 = full resolution, >0 = preview mode
     ): Result<File> {
         return try {
             val template = templateManager.loadTemplate(templateName)
                 ?: return Result.failure(Exception("Template not found: $templateName"))
 
-            val bitmap = loadBitmap(imageUri)
+            var bitmap = loadBitmap(imageUri)
                 ?: return Result.failure(Exception("Failed to load image"))
+
+            // Preview mode: downscale for faster rendering
+            if (maxWidth > 0 && bitmap.width > maxWidth) {
+                val scale = maxWidth.toFloat() / bitmap.width.toFloat()
+                val newWidth = maxWidth
+                val newHeight = (bitmap.height * scale).toInt()
+                bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+            }
 
             val exifData = readExif(imageUri)
             val processedData = exifFormatter.process(exifData, template)
-            val resultBitmap = renderBorder(bitmap, template, processedData)
+            val resultBitmap = renderBorder(bitmap, template, processedData, fontId)
 
             saveImage(resultBitmap, outputFile)
             Result.success(outputFile)
@@ -63,10 +75,24 @@ class BorderEngine(private val context: Context) {
         }
     }
 
+    private fun getTypeface(fontId: String): Typeface {
+        return typefaceCache[fontId] ?: try {
+            val fontFile = fontManager.getFontFile(fontId)
+            if (fontFile != null) {
+                Typeface.createFromAsset(context.assets, "fonts/$fontFile")
+            } else {
+                Typeface.DEFAULT
+            }
+        } catch (e: Exception) {
+            Typeface.DEFAULT
+        }.also { typefaceCache[fontId] = it }
+    }
+
     private fun renderBorder(
         originalBitmap: Bitmap,
         template: Template,
-        data: Map<String, String>
+        data: Map<String, String>,
+        fontId: String
     ): Bitmap {
         val origWidth = originalBitmap.width
         val origHeight = originalBitmap.height
@@ -102,9 +128,9 @@ class BorderEngine(private val context: Context) {
         )
 
         if (isPortrait) {
-            renderPortrait(canvas, template, data, origWidth, origHeight, borderHeight, scale)
+            renderPortrait(canvas, template, data, origWidth, origHeight, borderHeight, scale, fontId)
         } else {
-            renderLandscape(canvas, template, data, origWidth, origHeight, borderHeight, scale)
+            renderLandscape(canvas, template, data, origWidth, origHeight, borderHeight, scale, fontId)
         }
 
         return resultBitmap
@@ -117,13 +143,17 @@ class BorderEngine(private val context: Context) {
         origWidth: Int,
         origHeight: Int,
         borderHeight: Int,
-        scale: Float
+        scale: Float,
+        fontId: String
     ) {
         val sideMargin = (origWidth * template.layout.sideMarginRatio).toInt()
         val centerGap = (origWidth * template.layout.centerGapRatio).toInt()
         val brandModelSpacing = (borderHeight * 0.12).toInt()
 
-        val textPaint = Paint().apply { isAntiAlias = true }
+        val textPaint = Paint().apply { 
+            isAntiAlias = true
+            typeface = getTypeface(fontId)
+        }
         val brand = data["camera_brand"] ?: ""
         val model = data["camera_model"] ?: ""
         val lens = data["lens_model"] ?: ""
@@ -189,6 +219,7 @@ class BorderEngine(private val context: Context) {
 
         val finalScale = scale * dynamicScale
 
+        // 垂直居中调整 - 与Python原型一致
         val cameraY = origHeight + borderHeight * 0.24f
         val lensY = origHeight + borderHeight * 0.54f
         val paramsY = origHeight + borderHeight * 0.26f
@@ -196,8 +227,10 @@ class BorderEngine(private val context: Context) {
 
         var currentX = sideMargin.toFloat()
         logoBitmap?.let { logo ->
-            val logoY = cameraY + borderHeight * fontCamera.sizeRatio * finalScale - logoHeight +
-                    (template.brandLogos[brand]?.baselineOffset ?: 0)
+            // 基线对齐：LOGO底部与文字基线对齐
+            val textBaselineOffset = borderHeight * fontCamera.sizeRatio * finalScale * 0.25f
+            val logoY = cameraY - logoHeight + textBaselineOffset +
+                    (template.brandLogos[brand]?.baselineOffset?.times(finalScale) ?: 0f)
             canvas.drawBitmap(logo, currentX, logoY, null)
             currentX += logoWidth + brandModelSpacing
         }
@@ -252,6 +285,7 @@ class BorderEngine(private val context: Context) {
                 this.textSize = borderHeight * fontZZ.sizeRatio * finalScale
             }
             canvas.drawText("Z", zzX, photoY, textPaint)
+            // ZZ重叠效果 - 与Python原型一致
             val offset = (zWidth * 0.45).toInt()
             canvas.drawText("Z", zzX + offset, photoY, textPaint)
 
@@ -270,7 +304,8 @@ class BorderEngine(private val context: Context) {
         origWidth: Int,
         origHeight: Int,
         borderHeight: Int,
-        scale: Float
+        scale: Float,
+        fontId: String
     ) {
         val sideMargin = (origWidth * 0.05).toInt()
         val gap = (origWidth * 0.012).toInt()
@@ -280,7 +315,10 @@ class BorderEngine(private val context: Context) {
         val params = buildParamsString(data, true)
         val photoBy = data["date"] ?: ""
 
-        val textPaint = Paint().apply { isAntiAlias = true }
+        val textPaint = Paint().apply { 
+            isAntiAlias = true
+            typeface = getTypeface(fontId)
+        }
         val fontCamera = template.fonts["camera"] ?: return
         val fontLens = template.fonts["lens"] ?: return
         val fontParams = template.fonts["params"] ?: return
@@ -332,8 +370,9 @@ class BorderEngine(private val context: Context) {
             var currentX = sideMargin.toFloat()
 
             logoBitmap?.let { logo ->
-                val logoY = y + borderHeight * fontCamera.sizeRatio * scale - logoHeight +
-                        (template.brandLogos[brand]?.baselineOffset ?: 0)
+                val textBaselineOffset = borderHeight * fontCamera.sizeRatio * scale * 0.25f
+                val logoY = y - logoHeight + textBaselineOffset +
+                        (template.brandLogos[brand]?.baselineOffset?.times(scale) ?: 0f)
                 canvas.drawBitmap(logo, currentX, logoY, null)
                 currentX += logoWidth + gap
             }
@@ -390,8 +429,9 @@ class BorderEngine(private val context: Context) {
             var currentX = sideMargin.toFloat()
 
             logoBitmap?.let { logo ->
-                val logoY = line1Y + borderHeight * fontCamera.sizeRatio * scale - logoHeight +
-                        (template.brandLogos[brand]?.baselineOffset ?: 0)
+                val textBaselineOffset = borderHeight * fontCamera.sizeRatio * scale * 0.25f
+                val logoY = line1Y - logoHeight + textBaselineOffset +
+                        (template.brandLogos[brand]?.baselineOffset?.times(scale) ?: 0f)
                 canvas.drawBitmap(logo, currentX, logoY, null)
                 currentX += logoWidth + gap
             }
