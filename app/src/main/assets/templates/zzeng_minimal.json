@@ -13,7 +13,8 @@
     "border_height_ratio_portrait": 0.18,
     "background_color": "#FFFFFF",
     "side_margin_ratio": 0.04,
-    "center_gap_ratio": 0.06
+    "center_gap_ratio": 0.06,
+    "vertical_center": true
   },
   "brand_logos": {
     "Sony": {
@@ -88,7 +89,7 @@
       "content": "{camera_model}",
       "position": "left_top_after_logo",
       "font_ref": "camera",
-      "y_ratio": 0.24
+      "y_ratio": 0.26
     },
     {
       "id": "lens_model",
@@ -96,7 +97,7 @@
       "content": "{lens_model}",
       "position": "left_bottom",
       "font_ref": "lens",
-      "y_ratio": 0.54
+      "y_ratio": 0.56
     },
     {
       "id": "params",
@@ -113,7 +114,7 @@
       "content": "Photo by {zz_logo}eng @ {date}",
       "position": "right_bottom",
       "font_ref": "photo_by",
-      "y_ratio": 0.54,
+      "y_ratio": 0.56,
       "align": "right",
       "special_elements": [
         {

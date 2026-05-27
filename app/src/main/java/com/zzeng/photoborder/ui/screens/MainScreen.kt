@@ -54,6 +54,7 @@ fun MainScreen() {
     var progress by remember { mutableStateOf(0) }
     var total by remember { mutableStateOf(0) }
     var resultMessage by remember { mutableStateOf("") }
+    var currentProcessingFile by remember { mutableStateOf("") }
     var showTemplateDialog by remember { mutableStateOf(false) }
     var showFontDialog by remember { mutableStateOf(false) }
     var showBatchDialog by remember { mutableStateOf(false) }
@@ -91,6 +92,7 @@ fun MainScreen() {
                         context.cacheDir,
                         "preview_${System.currentTimeMillis()}.jpg"
                     )
+                    // 预览使用与输出相同的渲染逻辑，但降低分辨率以加速
                     val result = borderEngine.processImage(
                         uri,
                         selectedTemplate,
@@ -101,11 +103,11 @@ fun MainScreen() {
                     if (result.isSuccess) {
                         val bitmap = android.graphics.BitmapFactory.decodeFile(outputFile.absolutePath)
                         bitmap?.let {
-                                    previewCache[cacheKey] = it
-                                    withContext(Dispatchers.Main) {
-                                        previewBitmap = it
-                                    }
-                                }
+                            previewCache[cacheKey] = it
+                            withContext(Dispatchers.Main) {
+                                previewBitmap = it
+                            }
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -259,18 +261,19 @@ fun MainScreen() {
 
                                 selectedImageUris.forEachIndexed { index, uri ->
                                     progress = index + 1
+                                    currentProcessingFile = uri.lastPathSegment ?: "Image ${index + 1}"
                                     try {
                                         val outputFile = File(
                                             context.getExternalFilesDir(null),
                                             "bordered_${System.currentTimeMillis()}_${index}.jpg"
                                         )
-                    val result = borderEngine.processImage(
-                        uri, 
-                        selectedTemplate, 
-                        selectedFont,
-                        outputFile,
-                        maxWidth = 0  // Full resolution for final output
-                    )
+                                        val result = borderEngine.processImage(
+                                            uri,
+                                            selectedTemplate,
+                                            selectedFont,
+                                            outputFile,
+                                            maxWidth = 0  // Full resolution for final output
+                                        )
                                         if (result.isSuccess) {
                                             // Save to public gallery
                                             saveToGallery(context, outputFile)
@@ -282,6 +285,7 @@ fun MainScreen() {
                                         failCount++
                                     }
                                 }
+                                currentProcessingFile = ""
 
                                 resultMessage = if (failCount == 0) {
                                     "Success! Processed $successCount images. Saved to Pictures/PhotoBorderApp/"
@@ -322,6 +326,13 @@ fun MainScreen() {
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text("Processing $progress / $total")
+                if (currentProcessingFile.isNotEmpty()) {
+                    Text(
+                        text = currentProcessingFile,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             // Result
@@ -382,15 +393,15 @@ fun MainScreen() {
                 LazyColumn(modifier = Modifier.height(400.dp)) {
                     items(fonts) { font ->
                         val isSelected = font.id == selectedFont
+                        val typeface = remember(font.id) {
+                            try {
+                                Typeface.createFromAsset(context.assets, "fonts/${font.file}")
+                            } catch (e: Exception) {
+                                Typeface.DEFAULT
+                            }
+                        }
                         ListItem(
                             headlineContent = {
-                                val typeface = remember(font.file) {
-                                    try {
-                                        Typeface.createFromAsset(context.assets, "fonts/${font.file}")
-                                    } catch (e: Exception) {
-                                        Typeface.DEFAULT
-                                    }
-                                }
                                 Text(
                                     text = font.name,
                                     fontFamily = FontFamily(typeface),
@@ -398,13 +409,6 @@ fun MainScreen() {
                                 )
                             },
                             supportingContent = {
-                                val typeface = remember(font.file) {
-                                    try {
-                                        Typeface.createFromAsset(context.assets, "fonts/${font.file}")
-                                    } catch (e: Exception) {
-                                        Typeface.DEFAULT
-                                    }
-                                }
                                 Text(
                                     text = "${font.family} - ${font.style}",
                                     fontFamily = FontFamily(typeface),

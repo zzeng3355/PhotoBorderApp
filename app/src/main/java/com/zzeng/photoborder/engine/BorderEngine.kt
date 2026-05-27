@@ -220,16 +220,28 @@ class BorderEngine(private val context: Context) {
         val finalScale = scale * dynamicScale
 
         // 垂直居中调整 - 与Python原型一致
-        val cameraY = origHeight + borderHeight * 0.24f
-        val lensY = origHeight + borderHeight * 0.54f
-        val paramsY = origHeight + borderHeight * 0.26f
-        val photoY = origHeight + borderHeight * 0.54f
+        // 计算内容高度以实现垂直居中
+        val line1Height = borderHeight * 0.35f  // 第一行（相机+参数）高度
+        val line2Height = borderHeight * 0.35f  // 第二行（镜头+日期）高度
+        val totalContentHeight = line1Height + line2Height
+        val topOffset = (borderHeight - totalContentHeight) / 2f
+        
+        val cameraY = origHeight + topOffset + line1Height * 0.65f
+        val lensY = origHeight + topOffset + line1Height + line2Height * 0.65f
+        val paramsY = origHeight + topOffset + line1Height * 0.65f
+        val photoY = origHeight + topOffset + line1Height + line2Height * 0.65f
 
         var currentX = sideMargin.toFloat()
         logoBitmap?.let { logo ->
             // 基线对齐：LOGO底部与文字基线对齐
-            val textBaselineOffset = borderHeight * fontCamera.sizeRatio * finalScale * 0.25f
-            val logoY = cameraY - logoHeight + textBaselineOffset +
+            // 计算文字基线位置，让LOGO底部与文字基线对齐
+            val textPaintForBaseline = Paint().apply {
+                textSize = borderHeight * fontCamera.sizeRatio * finalScale
+                typeface = getTypeface(fontId)
+            }
+            val fontMetrics = textPaintForBaseline.fontMetrics
+            val textBaseline = cameraY  // 文字的Y坐标就是基线位置
+            val logoY = textBaseline - logoHeight + fontMetrics.descent * 0.3f +
                     (template.brandLogos[brand]?.baselineOffset?.times(finalScale) ?: 0f)
             canvas.drawBitmap(logo, currentX, logoY, null)
             currentX += logoWidth + brandModelSpacing
