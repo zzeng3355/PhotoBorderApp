@@ -1,0 +1,267 @@
+{
+  "template_name": "zzeng_minimal",
+  "version": "1.0",
+  "author": "ZZeng",
+  "description": "极简白底边框，左侧相机型号+镜头，右侧参数+日期，金色ZZ标志",
+  "base_resolution": {
+    "width": 3840,
+    "height": 2560
+  },
+  "layout": {
+    "border_position": "bottom",
+    "border_height_ratio_landscape": 0.14,
+    "border_height_ratio_portrait": 0.18,
+    "background_color": "#FFFFFF",
+    "side_margin_ratio": 0.04,
+    "center_gap_ratio": 0.06
+  },
+  "brand_logos": {
+    "Sony": {
+      "file": "sony_v2.png",
+      "height_ratio": 0.18,
+      "baseline_offset": 6
+    },
+    "Nikon": {
+      "file": "nikon_clean_v2.png",
+      "height_ratio": 0.18,
+      "baseline_offset": 6
+    },
+    "Fujifilm": {
+      "file": "fujifilm.png",
+      "height_ratio": 0.18,
+      "baseline_offset": 6
+    },
+    "Canon": {
+      "file": "canon.png",
+      "height_ratio": 0.18,
+      "baseline_offset": 6
+    },
+    "Panasonic": {
+      "file": "panasonic.png",
+      "height_ratio": 0.18,
+      "baseline_offset": 6
+    },
+    "Olympus": {
+      "file": "olympus.png",
+      "height_ratio": 0.18,
+      "baseline_offset": 6
+    }
+  },
+  "fonts": {
+    "camera": {
+      "family": "Microsoft YaHei",
+      "size_ratio": 0.18,
+      "color": "#333333"
+    },
+    "lens": {
+      "family": "Microsoft YaHei",
+      "size_ratio": 0.14,
+      "color": "#888888"
+    },
+    "params": {
+      "family": "Microsoft YaHei",
+      "size_ratio": 0.16,
+      "color": "#333333"
+    },
+    "photo_by": {
+      "family": "Microsoft YaHei",
+      "size_ratio": 0.14,
+      "color": "#888888"
+    },
+    "zz": {
+      "family": "Microsoft YaHei",
+      "size_ratio": 0.14,
+      "color": "#FFD700"
+    }
+  },
+  "elements_landscape": [
+    {
+      "id": "brand_logo",
+      "type": "brand_logo",
+      "position": "left_top",
+      "baseline_align": true,
+      "y_ratio": 0.24
+    },
+    {
+      "id": "camera_model",
+      "type": "text",
+      "content": "{camera_model}",
+      "position": "left_top_after_logo",
+      "font_ref": "camera",
+      "y_ratio": 0.24
+    },
+    {
+      "id": "lens_model",
+      "type": "text",
+      "content": "{lens_model}",
+      "position": "left_bottom",
+      "font_ref": "lens",
+      "y_ratio": 0.54
+    },
+    {
+      "id": "params",
+      "type": "text",
+      "content": "{aperture} | {shutter} | ISO {iso} | {focal}mm",
+      "position": "right_top",
+      "font_ref": "params",
+      "y_ratio": 0.26,
+      "align": "right"
+    },
+    {
+      "id": "photo_by",
+      "type": "text",
+      "content": "Photo by {zz_logo}eng @ {date}",
+      "position": "right_bottom",
+      "font_ref": "photo_by",
+      "y_ratio": 0.54,
+      "align": "right",
+      "special_elements": [
+        {
+          "type": "zz_logo",
+          "text": "ZZ",
+          "color": "#FFD700",
+          "overlap_ratio": 0.45,
+          "font_ref": "zz"
+        }
+      ]
+    }
+  ],
+  "elements_portrait_single_line": [
+    {
+      "id": "brand_logo",
+      "type": "brand_logo",
+      "position": "inline_left",
+      "baseline_align": true
+    },
+    {
+      "id": "camera_model",
+      "type": "text",
+      "content": "{camera_model}",
+      "font_ref": "camera"
+    },
+    {
+      "id": "params",
+      "type": "text",
+      "content": "{aperture} | {shutter} | ISO{iso} | {focal}mm",
+      "font_ref": "params"
+    },
+    {
+      "id": "photo_by",
+      "type": "text",
+      "content": "Photo by {zz_logo}eng @ {date}",
+      "font_ref": "photo_by",
+      "special_elements": [
+        {
+          "type": "zz_logo",
+          "text": "ZZ",
+          "color": "#FFD700",
+          "overlap_ratio": 0.45,
+          "font_ref": "zz"
+        }
+      ]
+    }
+  ],
+  "elements_portrait_two_line": [
+    {
+      "id": "brand_logo_line1",
+      "type": "brand_logo",
+      "position": "left_top",
+      "baseline_align": true,
+      "y_ratio": 0.22
+    },
+    {
+      "id": "camera_model_line1",
+      "type": "text",
+      "content": "{camera_model}",
+      "position": "left_top_after_logo",
+      "font_ref": "camera",
+      "y_ratio": 0.22
+    },
+    {
+      "id": "params_line1",
+      "type": "text",
+      "content": "{aperture} | {shutter} | ISO{iso} | {focal}mm",
+      "position": "right_top",
+      "font_ref": "params",
+      "y_ratio": 0.22,
+      "align": "right"
+    },
+    {
+      "id": "lens_model_line2",
+      "type": "text",
+      "content": "{lens_model}",
+      "position": "left_bottom",
+      "font_ref": "lens",
+      "y_ratio": 0.58
+    },
+    {
+      "id": "photo_by_line2",
+      "type": "text",
+      "content": "Photo by {zz_logo}eng @ {date}",
+      "position": "right_bottom",
+      "font_ref": "photo_by",
+      "y_ratio": 0.58,
+      "align": "right",
+      "special_elements": [
+        {
+          "type": "zz_logo",
+          "text": "ZZ",
+          "color": "#FFD700",
+          "overlap_ratio": 0.45,
+          "font_ref": "zz"
+        }
+      ]
+    }
+  ],
+  "exif_mapping": {
+    "camera_brand": "Make",
+    "camera_model": "Model",
+    "lens_model": "LensModel",
+    "aperture": "Aperture",
+    "shutter": "ShutterSpeed",
+    "iso": "ISO",
+    "focal": "FocalLength",
+    "date": "DateTimeOriginal"
+  },
+  "format_rules": {
+    "aperture": {
+      "prefix": "F",
+      "remove_decimal_if_whole": true
+    },
+    "shutter": {
+      "format": "fraction",
+      "suffix": "s"
+    },
+    "iso": {
+      "prefix": "ISO",
+      "portrait_compact": true
+    },
+    "focal": {
+      "suffix": "mm",
+      "round_to_int": true
+    },
+    "date": {
+      "format": "MMM YYYY",
+      "prefix": "Photo by ZZeng @ "
+    }
+  },
+  "brand_model_map": {
+    "NIKON CORPORATION": "Nikon",
+    "NIKON": "Nikon",
+    "SONY": "Sony",
+    "Canon": "Canon",
+    "FUJIFILM": "Fujifilm",
+    "Panasonic": "Panasonic",
+    "OLYMPUS": "Olympus"
+  },
+  "model_simplification": {
+    "Z 6_2": "Z 6II",
+    "Z6_2": "Z 6II",
+    "Z 7_2": "Z 7II",
+    "Z7_2": "Z 7II",
+    "ILCE-6700": "a6700",
+    "ZV-E10M2": "ZV-E10 II",
+    "ILCE-7CM2": "a7C II",
+    "ILCE-7M4": "a7 IV"
+  }
+}

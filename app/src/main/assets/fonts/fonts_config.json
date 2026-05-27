@@ -1,0 +1,244 @@
+{
+  "fonts": [
+    {
+      "id": "yahei",
+      "name": "微软雅黑",
+      "family": "Microsoft YaHei",
+      "file": "msyh.ttc",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "yahei_light",
+      "name": "微软雅黑 Light",
+      "family": "Microsoft YaHei Light",
+      "file": "msyhl.ttc",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "simsun",
+      "name": "宋体",
+      "family": "SimSun",
+      "file": "simsun.ttc",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "simhei",
+      "name": "黑体",
+      "family": "SimHei",
+      "file": "simhei.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "kaiti",
+      "name": "楷体",
+      "family": "KaiTi",
+      "file": "simkai.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "fangsong",
+      "name": "仿宋",
+      "family": "FangSong",
+      "file": "simfang.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "arial",
+      "name": "Arial",
+      "family": "Arial",
+      "file": "arial.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "arial_bold",
+      "name": "Arial Bold",
+      "family": "Arial Bold",
+      "file": "arialbd.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "times",
+      "name": "Times New Roman",
+      "family": "Times New Roman",
+      "file": "times.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "times_bold",
+      "name": "Times New Roman Bold",
+      "family": "Times New Roman Bold",
+      "file": "timesbd.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "calibri",
+      "name": "Calibri",
+      "family": "Calibri",
+      "file": "calibri.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "calibri_light",
+      "name": "Calibri Light",
+      "family": "Calibri Light",
+      "file": "calibril.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "segoe_ui",
+      "name": "Segoe UI",
+      "family": "Segoe UI",
+      "file": "segoeui.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "segoe_ui_light",
+      "name": "Segoe UI Light",
+      "family": "Segoe UI Light",
+      "file": "segoeuil.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "georgia",
+      "name": "Georgia",
+      "family": "Georgia",
+      "file": "georgia.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "verdana",
+      "name": "Verdana",
+      "family": "Verdana",
+      "file": "verdana.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "trebuchet",
+      "name": "Trebuchet MS",
+      "family": "Trebuchet MS",
+      "file": "trebuc.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "cambria",
+      "name": "Cambria",
+      "family": "Cambria",
+      "file": "cambria.ttc",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "consolas",
+      "name": "Consolas",
+      "family": "Consolas",
+      "file": "consola.ttf",
+      "category": "monospace",
+      "style": "modern"
+    },
+    {
+      "id": "courier",
+      "name": "Courier New",
+      "family": "Courier New",
+      "file": "cour.ttf",
+      "category": "monospace",
+      "style": "classic"
+    },
+    {
+      "id": "impact",
+      "name": "Impact",
+      "family": "Impact",
+      "file": "impact.ttf",
+      "category": "sans-serif",
+      "style": "bold"
+    },
+    {
+      "id": "comic",
+      "name": "Comic Sans MS",
+      "family": "Comic Sans MS",
+      "file": "comic.ttf",
+      "category": "sans-serif",
+      "style": "casual"
+    },
+    {
+      "id": "lucida",
+      "name": "Lucida Sans Unicode",
+      "family": "Lucida Sans Unicode",
+      "file": "l_10646.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "palatino",
+      "name": "Palatino Linotype",
+      "family": "Palatino Linotype",
+      "file": "pala.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "garamond",
+      "name": "Garamond",
+      "family": "Garamond",
+      "file": "gara.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "bookman",
+      "name": "Bookman Old Style",
+      "family": "Bookman Old Style",
+      "file": "bookos.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "century",
+      "name": "Century Gothic",
+      "family": "Century Gothic",
+      "file": "gothic.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "franklin",
+      "name": "Franklin Gothic Medium",
+      "family": "Franklin Gothic Medium",
+      "file": "framd.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    },
+    {
+      "id": "rockwell",
+      "name": "Rockwell",
+      "family": "Rockwell",
+      "file": "rock.ttf",
+      "category": "serif",
+      "style": "classic"
+    },
+    {
+      "id": "bahnschrift",
+      "name": "Bahnschrift",
+      "family": "Bahnschrift",
+      "file": "bahnschrift.ttf",
+      "category": "sans-serif",
+      "style": "modern"
+    }
+  ]
+}
