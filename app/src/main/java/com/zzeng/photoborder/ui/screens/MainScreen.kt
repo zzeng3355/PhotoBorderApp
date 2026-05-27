@@ -174,7 +174,7 @@ fun MainScreen() {
             // Progress
             if (isProcessing) {
                 LinearProgressIndicator(
-                    progress = { progress },
+                    progress = { progress.toFloat() },
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Text("Processing $progress / $total")
